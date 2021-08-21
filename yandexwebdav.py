@@ -221,7 +221,9 @@ class Config(object):
             try:
                 href = os.path.join(u("/"), _(href))
                 conn = self.getConnection()
-                conn.request("PROPFIND", _encode_utf8(href), u(""), self.getHeaders())
+                href = _encode_utf8(href)
+                href = quote(href)
+                conn.request("PROPFIND",href, u(""), self.getHeaders())
                 response = conn.getresponse()
                 checkResponse(response)
                 data = response.read()
@@ -323,8 +325,10 @@ class Config(object):
             logger.info(u("mkdir(%s): %s") % (iTry, href))
             try:
                 href = remote(href)
+                href = _encode_utf8(href)
+                href = quote(href)
                 con = self.getConnection()
-                con.request("MKCOL", _encode_utf8(href), "", self.getHeaders())
+                con.request("MKCOL", href, "", self.getHeaders())
                 response = con.getresponse()
                 checkResponse(response)
                 return response.read()
@@ -407,8 +411,10 @@ class Config(object):
             logger.info(u("delete(%s): %s") % (iTry, href))
             try:
                 href = remote(href)
+                href = _encode_utf8(href)
+                href = quote(href)
                 conn = self.getConnection()
-                conn.request("DELETE", _encode_utf8(href), "", self.getHeaders())
+                conn.request("DELETE", href, "", self.getHeaders())
                 response = conn.getresponse()
                 checkResponse(response)
                 return response.read()
@@ -465,7 +471,7 @@ class Config(object):
                 length = os.path.getsize(localpath)
 
                 if PY3:
-                    _open = open(_encode_utf8(localpath), "r", encoding='latin-1')
+                    _open = open(_encode_utf8(localpath), "rb")
                 else:
                     _open = open(_encode_utf8(localpath), "r")
                 with _open as f:
