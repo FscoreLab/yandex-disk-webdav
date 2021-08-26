@@ -348,8 +348,10 @@ class Config(object):
             try:
                 logger.info(u("download(%s): %s") % (iTry, href))
                 href = remote(href)
+                href = _encode_utf8(href)
+                href = quote(href)
                 conn = self.getConnection()
-                conn.request("GET", _encode_utf8(href), "", self.getHeaders())
+                conn.request("GET", href, "", self.getHeaders())
                 response = conn.getresponse()
                 checkResponse(response, "href={0}".format(href))
                 data = response.read()
@@ -375,9 +377,10 @@ class Config(object):
             try:
                 href = remote(href)
                 localpath = _(localpath)
-
+                href = _encode_utf8(href)
+                href = quote(href)
                 conn = self.getConnection()
-                conn.request("GET", _encode_utf8(href), "", self.getHeaders())
+                conn.request("GET", href, "", self.getHeaders())
                 response = conn.getresponse()
                 checkResponse(response)
                 f = None
