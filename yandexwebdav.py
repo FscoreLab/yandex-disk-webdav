@@ -386,13 +386,13 @@ class Config(object):
                 f = None
                 try:
                     while True:
-                        data = _decode_utf8(response.read(1024))
+                        data = response.read(1024)
                         if not data:
                             break
                         if data == u('resource not found'):
                             return False
                         if not f:
-                            f = open(localpath, "w")
+                            f = open(localpath, "wb")
                         f.write(data)
                 finally:
                     if f:
